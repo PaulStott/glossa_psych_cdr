@@ -36,3 +36,5 @@ RUN R -e "devtools::install_version('lmerTest', version = '3.2-1', dependencies 
 RUN R -e "devtools::install_version('lme4', version = '2.0-1', dependencies = TRUE)"
 RUN R -e "devtools::install_version('Matrix', version = '1.7-4', dependencies = TRUE)"
 RUN R -e "devtools::install_version('lubridate', version = '1.9.5', dependencies = TRUE)"
+RUN R -e "devtools::install_version('tibble', version = '3.3.1', dependencies = TRUE)"
+
