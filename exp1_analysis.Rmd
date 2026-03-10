@@ -190,15 +190,15 @@ int_chunks_plot <- chunks_data %>%
 
 ```{r}
 #combine plots
-pdf("charts/exp1_ext_int_chunks_plot.pdf", width = 14, height = 14)
-ext_chunks_plot + 
-  int_chunks_plot + 
-  plot_layout(ncol = 1,
-              guides = "collect",
-              axis_titles = "collect") +
-  plot_annotation(title = "Mean Chunk Reading Times (ms.)",
-                  theme = theme(plot.title = element_text(hjust = 0.5,
-                                                          size = 30)))
+#pdf("charts/exp1_ext_int_chunks_plot.pdf", width = 14, height = 14)
+#ext_chunks_plot + 
+#  int_chunks_plot + 
+#  plot_layout(ncol = 1,
+#              guides = "collect",
+#              axis_titles = "collect") +
+#  plot_annotation(title = "Mean Chunk Reading Times (ms.)",
+#                  theme = theme(plot.title = element_text(hjust = 0.5,
+#                                                          size = 30)))
 ```
 
 ```{r}
@@ -210,7 +210,7 @@ sum_tbl(exp1_tidied)
 
 ```{r}
 #dataviz for condition - logged for better viz.
-pdf("charts/exp1_pp_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp1_pp_plot.pdf", width = 14, height = 14)
 pp_viz <- exp1_tidied %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
              y = PP.RESID.LOG, #log RTs on y axis
@@ -386,7 +386,7 @@ pp_emms_pos
 
 ```{r, message=FALSE}
 #plot it
-pdf("charts/exp1_pp_emms_ixn_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp1_pp_emms_ixn_plot.pdf", width = 14, height = 14)
 pp_emms_ixn_plot <- emmip(pp.mod8, 
                             RestrictorType ~ RestrictorPosition,
                            CIs = TRUE,
@@ -412,7 +412,7 @@ pp_emms_ixn_plot
 
 ```{r}
 #dataviz for condition - logged for better viz.
-pdf("charts/exp1_vp_plot.pdf", height = 14, width = 14)
+#pdf("charts/exp1_vp_plot.pdf", height = 14, width = 14)
 vp_viz <- exp1_tidied %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
              y = VP.RESID.LOG, #log RTs on y axis
@@ -542,7 +542,7 @@ vp_emms_df <- as.data.frame(vp_emms$emmeans) %>%
 ```
 
 ```{r}
-pdf("charts/exp1_vp_emms_ixn_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp1_vp_emms_ixn_plot.pdf", width = 14, height = 14)
 vp_emms_ixn_plot <- ggplot(vp_emms_df,
                            aes(x = fct_reorder(RestrictorPosition, emmean), y = emmean,
                                colour = RestrictorPosition)) +
@@ -568,7 +568,7 @@ vp_emms_ixn_plot
 
 ```{r}
 #dataviz for condition - logged for better viz.
-pdf("charts/exp1_spill_plot.pdf", height = 14, width = 14)
+#pdf("charts/exp1_spill_plot.pdf", height = 14, width = 14)
 spill_viz <- exp1_tidied %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
              y = SPILL.RESID.LOG, #log RTs on y axis
@@ -755,7 +755,7 @@ int_chunks_plot_adj <- chunks_data_adjusted %>%
 
 ```{r}
 #combine plots
-pdf("charts/exp1_ext_int_chunks_adj_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp1_ext_int_chunks_adj_plot.pdf", width = 14, height = 14)
 ext_chunks_plot_adj + 
   int_chunks_plot_adj + 
   plot_layout(ncol = 1,
