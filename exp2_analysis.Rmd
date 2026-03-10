@@ -190,7 +190,7 @@ int_chunks_plot <- chunks_data %>%
 
 ```{r}
 #combine plots
-pdf("charts/exp2_ext_int_chunks_plot.pdf", width = 14, height = 14)
+#≈pdf("charts/exp2_ext_int_chunks_plot.pdf", width = 14, height = 14)
 ext_chunks_plot + 
   int_chunks_plot + 
   plot_layout(ncol = 1,
@@ -210,7 +210,7 @@ sum_tbl(exp2_tidied)
 
 ```{r}
 #dataviz for condition - logged for better viz.
-pdf("charts/exp2_pp_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp2_pp_plot.pdf", width = 14, height = 14)
 pp_viz <- exp2_tidied %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
              y = PP.RESID.LOG, #log RTs on y axis
@@ -333,7 +333,7 @@ pp_contrasts_simple %>%
 
 ```{r}
 #plot it
-pdf("charts/exp2_pp_emms_ixn_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp2_pp_emms_ixn_plot.pdf", width = 14, height = 14)
 pp_emms_ixn_plot <- emmip(pp.mod3, 
                             RestrictorType ~ RestrictorPosition,
                            CIs = TRUE,
@@ -359,7 +359,7 @@ pp_emms_ixn_plot
 
 ```{r}
 #look at trials - may be that there's an interaction with TrialN here
-pdf("charts/exp2_pp_trials_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp2_pp_trials_plot.pdf", width = 14, height = 14)
 pp_trials_viz <- exp2_tidied %>%
   ggplot(aes(x = TrialN, y = PP.RESID, color = RestrictorType, linetype = RestrictorType)) +
   geom_smooth(method = "lm", se = TRUE) +
@@ -442,7 +442,7 @@ pred_df <- as.data.frame(predicted_data)
 
 ```{r}
 #plot predicted RTs over trials - the adaptation rate is different; EXT-OTH gets easier so there's an ixn, but it's mediated by TrialN
-pdf("charts/exp2_pp_trials_pred_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp2_pp_trials_pred_plot.pdf", width = 14, height = 14)
 pp_trials_pred_viz <- pred_df %>%
   ggplot(aes(x = TrialN, y = emmean, color = RestrictorType, linetype = RestrictorType)) +
   geom_line(size = 1.2) +
@@ -464,7 +464,7 @@ pp_trials_pred_viz
 
 ```{r}
 #dataviz for condition - logged for better viz.
-pdf("charts/exp2_vp_plot.pdf", height = 14, width = 14)
+#pdf("charts/exp2_vp_plot.pdf", height = 14, width = 14)
 vp_viz <- exp2_tidied %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
              y = VP.RESID.LOG, #log RTs on y axis
@@ -618,7 +618,7 @@ contrast(vp_emms,
 
 ```{r}
 #plot it
-pdf("charts/exp2_vp_ixn_plot.pdf", height = 14, width = 14)
+#pdf("charts/exp2_vp_ixn_plot.pdf", height = 14, width = 14)
 vp_ixn_plot <- emmip(vp.mod7,
                      RestrictorType ~ RestrictorPosition,
                      CIs = TRUE,
@@ -644,7 +644,7 @@ vp_ixn_plot
 
 ```{r}
 #dataviz for condition - logged for better viz.
-pdf("charts/exp2_spill_plot.pdf", height = 14, width = 14)
+#pdf("charts/exp2_spill_plot.pdf", height = 14, width = 14)
 spill_viz <- exp2_tidied %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
              y = SPILL.RESID.LOG, #log RTs on y axis
@@ -741,7 +741,7 @@ spill_emms_df <- as.data.frame(spill_emms$emmeans) %>%
 
 ```{r}
 #plot it
-pdf("charts/exp2_spill_ixn_plot.pdf", height = 14, width = 14)
+#pdf("charts/exp2_spill_ixn_plot.pdf", height = 14, width = 14)
 spill_ixn_plot <- ggplot(spill_emms_df,
                            aes(x = fct_reorder(RestrictorType, emmean), y = emmean,
                                colour = RestrictorType)) +
@@ -859,7 +859,7 @@ int_chunks_plot_adj <- chunks_data_adjusted %>%
 
 ```{r}
 #combine plots
-pdf("charts/exp2_ext_int_chunks_adj_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp2_ext_int_chunks_adj_plot.pdf", width = 14, height = 14)
 ext_chunks_plot_adj + 
   int_chunks_plot_adj + 
   plot_layout(ncol = 1,
