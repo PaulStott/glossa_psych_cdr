@@ -29,7 +29,6 @@ mod_out <- function(model_name) {
   
   # Generate LaTeX output with stargazer
   stargazer(model_name,
-            out = "model_output.tex", 
             star.cutoffs = c(0.05, 0.01, 0.001), 
             digits = 2, 
             no.space = TRUE, 
@@ -91,7 +90,7 @@ library(Hmisc)          #for rcorr() function
 
 ```{r}
 #control scientific notation - makes reading p-values easier
-options("scipen"=100000, "digits"=10)
+options("scipen"=9999, "digits"=10)
 #increase no. of calcs for emmeans functions
 emm_options(pbkrtest.limit = 10000,
             lmerTest.limit = 10000)
@@ -190,7 +189,7 @@ int_chunks_plot <- chunks_data %>%
 
 ```{r}
 #combine plots
-#≈pdf("charts/exp2_ext_int_chunks_plot.pdf", width = 14, height = 14)
+#pdf("charts/exp2_ext_int_chunks_plot.pdf", width = 14, height = 14)
 ext_chunks_plot + 
   int_chunks_plot + 
   plot_layout(ncol = 1,
@@ -899,7 +898,7 @@ comprt.blmr1 <- buildmer(CompRT ~ RestrictorType * RestrictorPosition +
 ```
 
 ```{r}
-summary(comprt.blmr1) #RestrictorType fx
+summary(comprt.blmr1) #RestrictorType fx (OTH > SUB)
 ```
 
 ```{r}
@@ -908,6 +907,7 @@ comprt_emms <- emmeans(comprt.blmr1@model,
                        pairwise ~ RestrictorType, 
                        adjust = "tukey") #RTs slower in OTH conditions
 ```
+
 ## Look at LOOKED vs. SEEMED
 
 ```{r}

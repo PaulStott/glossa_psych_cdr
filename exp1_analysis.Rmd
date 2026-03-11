@@ -29,7 +29,6 @@ mod_out <- function(model_name) {
   
   # Generate LaTeX output with stargazer
   stargazer(model_name,
-            out = "model_output.tex", 
             star.cutoffs = c(0.05, 0.01, 0.001), 
             digits = 2, 
             no.space = TRUE, 
@@ -90,7 +89,7 @@ library(Hmisc)          #for rcorr() function
 
 ```{r}
 #control scientific notation - makes reading p-values easier
-options("scipen"=100000, "digits"=10)
+options("scipen"=9999, "digits"=10)
 #increase no. of calcs for emmeans functions
 emm_options(pbkrtest.limit = 10000,
             lmerTest.limit = 10000)
@@ -258,7 +257,7 @@ summary(pp.blmr1)
 ```{r}
 #buildmer manual
 pp.mod1 <- lmer(PP.RESID ~ RestrictorType * RestrictorPosition +
-                  (1 + RestrictorPosition + RestrictorType | Participant),
+                  (1 + RestrictorPosition | Participant),
                 data = exp1_tidied)
 summary(pp.mod1) #OK, pos and type fx
 ```
@@ -266,7 +265,7 @@ summary(pp.mod1) #OK, pos and type fx
 ```{r}
 #increase ranfx complexity
 pp.mod2 <- lmer(PP.RESID ~ RestrictorType * RestrictorPosition +
-                  (1 + RestrictorPosition + RestrictorType | Participant) +
+                  (1 + RestrictorPosition | Participant) +
                   (1 | StimID),
                 data = exp1_tidied)
 summary(pp.mod2) #OK, same fx
@@ -281,16 +280,16 @@ anova(pp.mod1, pp.mod2)
 #increase ranfx complexity
 pp.mod3 <- lmer(PP.RESID ~ RestrictorType * RestrictorPosition +
                   (1 + RestrictorPosition + RestrictorType | Participant) +
-                  (1 + RestrictorPosition | StimID),
+                  (1 | StimID),
                 data = exp1_tidied)
-summary(pp.mod3) #singular fit
+summary(pp.mod3) #ok
 ```
 
 ```{r}
 #increase ranfx complexity
 pp.mod4 <- lmer(PP.RESID ~ RestrictorType * RestrictorPosition +
                   (1 + RestrictorPosition + RestrictorType | Participant) +
-                  (1 + RestrictorType | StimID),
+                  (1 + RestrictorPosition | StimID),
                 data = exp1_tidied)
 summary(pp.mod4) #singular fit
 ```
