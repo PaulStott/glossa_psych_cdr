@@ -66,14 +66,13 @@ sum_tbl <- function(combined_data) {
 
 
 ```{r, message=FALSE}
-#load packages - nb: not all packages used
+#load packages
 library(tidyverse)      #for tidying and wrangling
 library(lme4)           #for LMM building
 library(lmerTest)       #for better output from LMMs
 library(emmeans)        #for our planned comparisons
 library(performance)    #check model assumptions
 library(buildmer)       #assists with iterating through covariates and ixns
-library(ggpubr)         #plotting
 library(texreg)         #for LaTeX table output
 library(kableExtra)     #table formatting
 library(xtable)         #table outputs
@@ -83,14 +82,11 @@ library(patchwork)      #for plotting
 library(stringr)        #string manipulation
 library(scales)         #aesthetics
 library(ggthemes)       #aesthetics
-library(fitdistrplus)   #to check distribution
-library(car)            #for vif() function
-library(Hmisc)          #for rcorr() function
 ```
 
 ```{r}
 #control scientific notation - makes reading p-values easier
-options("scipen"=9999, "digits"=10)
+options("scipen" = 9999, "digits" = 10)
 #increase no. of calcs for emmeans functions
 emm_options(pbkrtest.limit = 10000,
             lmerTest.limit = 10000)
@@ -189,7 +185,6 @@ int_chunks_plot <- chunks_data %>%
 
 ```{r}
 #combine plots
-#pdf("charts/exp2_ext_int_chunks_plot.pdf", width = 14, height = 14)
 ext_chunks_plot + 
   int_chunks_plot + 
   plot_layout(ncol = 1,
@@ -208,11 +203,16 @@ sum_tbl(exp2_tidied)
 ## Reading Time Analysis for Preposition Phrase
 
 ```{r}
-#dataviz for condition - logged for better viz.
-#pdf("charts/exp2_pp_plot.pdf", width = 14, height = 14)
+#dataviz for condition.
 pp_viz <- exp2_tidied %>%
+  filter(
+    PP.RESID >
+      quantile(PP.RESID, .01, na.rm = TRUE),
+    PP.RESID <
+      quantile(PP.RESID, .99, na.rm = TRUE)
+  ) %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
-             y = PP.RESID.LOG, #log RTs on y axis
+             y = PP.RESID, #log RTs on y axis
              fill = RestrictorType)) + #colour by condition
   theme_light(base_size = 25, #default font size
               base_line_size = .5, #default line weight
@@ -223,7 +223,7 @@ pp_viz <- exp2_tidied %>%
                outlier.shape = NA) + #don't show outlier dots
   scale_fill_manual(values = cbPalette) + #colour blind friendly palette
   labs(title = "PP Reading Times (ms.)",
-       y = "Logged Residual Reading Time (ms.)",
+       y = "Residual Reading Time (ms.)",
        x = NULL) +
   facet_wrap(~RestrictorPosition) +
   theme(legend.background = element_rect(color = "black", linewidth = 1), #box around legend
@@ -241,6 +241,7 @@ pp_viz
 
 ```{r, results=FALSE, message=FALSE}
 #building a buildmer model
+set.seed(9876)
 pp.blmr1 <- buildmer(PP.RESID ~ RestrictorType * RestrictorPosition +
                        (1 + RestrictorType * RestrictorPosition | Participant) +
                        (1 + RestrictorType * RestrictorPosition | StimID),
@@ -316,7 +317,7 @@ pp_emms_type
 ```{r}
 #emms
 pp_emms_simple <- emmeans(pp.mod3, ~ RestrictorType * RestrictorPosition,
-                   adjust = "none") #we'll adjust when doing contrasts
+                   adjust = "none")
 ```
 
 ```{r}
@@ -332,7 +333,6 @@ pp_contrasts_simple %>%
 
 ```{r}
 #plot it
-#pdf("charts/exp2_pp_emms_ixn_plot.pdf", width = 14, height = 14)
 pp_emms_ixn_plot <- emmip(pp.mod3, 
                             RestrictorType ~ RestrictorPosition,
                            CIs = TRUE,
@@ -358,7 +358,6 @@ pp_emms_ixn_plot
 
 ```{r}
 #look at trials - may be that there's an interaction with TrialN here
-#pdf("charts/exp2_pp_trials_plot.pdf", width = 14, height = 14)
 pp_trials_viz <- exp2_tidied %>%
   ggplot(aes(x = TrialN, y = PP.RESID, color = RestrictorType, linetype = RestrictorType)) +
   geom_smooth(method = "lm", se = TRUE) +
@@ -404,7 +403,7 @@ pp_emms_pos.TRIALS
 #looking to see whether OTH > SUB overall
 pp_emms_type.TRIALS <- emmeans(pp.mod4,
                        pairwise ~ RestrictorType,
-                       adjust = "none") #only one comparison made
+                       adjust = "none")
 #print
 pp_emms_type.TRIALS
 ```
@@ -412,7 +411,7 @@ pp_emms_type.TRIALS
 ```{r}
 #emms
 pp_emms_simple.TRIALS <- emmeans(pp.mod4, ~ RestrictorType * RestrictorPosition,
-                   adjust = "none") #we'll adjust when doing contrasts
+                   adjust = "none")
 ```
 
 ```{r}
@@ -441,7 +440,6 @@ pred_df <- as.data.frame(predicted_data)
 
 ```{r}
 #plot predicted RTs over trials - the adaptation rate is different; EXT-OTH gets easier so there's an ixn, but it's mediated by TrialN
-#pdf("charts/exp2_pp_trials_pred_plot.pdf", width = 14, height = 14)
 pp_trials_pred_viz <- pred_df %>%
   ggplot(aes(x = TrialN, y = emmean, color = RestrictorType, linetype = RestrictorType)) +
   geom_line(size = 1.2) +
@@ -462,11 +460,16 @@ pp_trials_pred_viz
 ## Reading Time Analysis for Verb Phrase
 
 ```{r}
-#dataviz for condition - logged for better viz.
-#pdf("charts/exp2_vp_plot.pdf", height = 14, width = 14)
+#dataviz for condition
 vp_viz <- exp2_tidied %>%
+  filter(
+    VP.RESID >
+      quantile(VP.RESID, .01, na.rm = TRUE),
+    VP.RESID <
+      quantile(VP.RESID, .99, na.rm = TRUE)
+  ) %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
-             y = VP.RESID.LOG, #log RTs on y axis
+             y = VP.RESID, #log RTs on y axis
              fill = RestrictorType)) + #colour by condition
   theme_light(base_size = 25, #default font size
               base_line_size = .5, #default line weight
@@ -477,7 +480,7 @@ vp_viz <- exp2_tidied %>%
                outlier.shape = NA) + #don't show outlier dots
   scale_fill_manual(values = cbPalette) + #colour blind friendly palette
   labs(title = "VP Reading Times (ms.)",
-       y = "Logged Residual Reading Time (ms.)",
+       y = "Residual Reading Time (ms.)",
        x = NULL) +
   facet_wrap(~RestrictorPosition) +
   theme(legend.background = element_rect(color = "black", linewidth = 1), #box around legend
@@ -495,6 +498,7 @@ vp_viz
 
 ```{r, results=FALSE, message=FALSE}
 #building a buildmer model first
+set.seed(9876)
 vp.blmr1 <- buildmer(VP.RESID ~ RestrictorType * RestrictorPosition +
                        (1 + RestrictorType * RestrictorPosition | Participant) +
                        (1 + RestrictorType * RestrictorPosition | StimID),
@@ -617,7 +621,6 @@ contrast(vp_emms,
 
 ```{r}
 #plot it
-#pdf("charts/exp2_vp_ixn_plot.pdf", height = 14, width = 14)
 vp_ixn_plot <- emmip(vp.mod7,
                      RestrictorType ~ RestrictorPosition,
                      CIs = TRUE,
@@ -635,18 +638,22 @@ vp_ixn_plot <- emmip(vp.mod7,
                                   hjust = 0.5), #center title
         legend.background = element_rect(color = "black", linewidth = 1), #box around legend
         legend.position = "bottom") #legend at bottom
-#print chart
 vp_ixn_plot
 ```
 
 ## Look at SPILL Region
 
 ```{r}
-#dataviz for condition - logged for better viz.
-#pdf("charts/exp2_spill_plot.pdf", height = 14, width = 14)
+#dataviz for condition
 spill_viz <- exp2_tidied %>%
+  filter(
+    SPILL.RESID >
+      quantile(SPILL.RESID, .01, na.rm = TRUE),
+    SPILL.RESID <
+      quantile(SPILL.RESID, .99, na.rm = TRUE)
+  ) %>%
   ggplot(aes(x = RestrictorType, #group by condition on x axis
-             y = SPILL.RESID.LOG, #log RTs on y axis
+             y = SPILL.RESID, #log RTs on y axis
              fill = RestrictorType)) + #colour by condition
   theme_light(base_size = 25, #default font size
               base_line_size = .5, #default line weight
@@ -657,22 +664,22 @@ spill_viz <- exp2_tidied %>%
                outlier.shape = NA) + #don't show outlier dots
   scale_fill_manual(values = cbPalette) + #colour blind friendly palette
   labs(title = "SPILL Reading Times (ms.)",
-       y = "Logged Reading Time (ms.)",
+       y = "Residual Reading Time (ms.)",
        x = NULL) +
+  facet_wrap(~RestrictorPosition) +
   theme(legend.background = element_rect(color = "black", linewidth = 1), #box around legend
         plot.title = element_text(hjust = 0.5, size = 30), #center title, title font size
         legend.position = "bottom") + #legend at bottom
   coord_flip() + #flip coordinates so it's horizontal
-  facet_wrap(~RestrictorPosition) +
   theme(legend.background = element_rect(color = "black", linewidth = 1),
         plot.title = element_text(hjust = 0.5, size = 25),
         strip.background = element_rect(fill = "grey90"),
         strip.text = element_text(colour = "black"))
-#print chart
 spill_viz
 ```
 
 ```{r}
+set.seed(9876)
 spill.blmr1 <- buildmer(SPILL.RESID ~ RestrictorType * RestrictorPosition +
                           (1 + RestrictorType * RestrictorPosition | Participant) +
                           (1 + RestrictorType * RestrictorPosition | StimID),
@@ -740,7 +747,6 @@ spill_emms_df <- as.data.frame(spill_emms$emmeans) %>%
 
 ```{r}
 #plot it
-#pdf("charts/exp2_spill_ixn_plot.pdf", height = 14, width = 14)
 spill_ixn_plot <- ggplot(spill_emms_df,
                            aes(x = fct_reorder(RestrictorType, emmean), y = emmean,
                                colour = RestrictorType)) +
@@ -763,118 +769,13 @@ spill_ixn_plot <- ggplot(spill_emms_df,
 spill_ixn_plot
 ```
 
-## Dataviz Showing Adjusted Means For ROIs
-
-```{r}
-#extract emms
-vp_tbl <- tibble(as.data.frame(vp_emms))
-pp_tbl <- tibble(as.data.frame(pp_emms_simple.TRIALS))
-spill_tbl <- tibble(as.data.frame(spill_emms_df))
-```
-
-
-```{r}
-#dataviz showing raw mean RTs for quant and N regions
-#and EMMs for PP, VP and SPILL regions
-
-#list all emm_list objects
-all_emms <- list(
-  pp_tbl %>% #PP emms from modelling
-    mutate(Chunk = case_when(RestrictorPosition == "INT" ~ "C3.RT.RESID",
-                             RestrictorPosition == "EXT" ~ "C4.RT.RESID")),
-  vp_tbl %>% #VP emms from modelling
-    mutate(Chunk = case_when(RestrictorPosition == "INT" ~ "C4.RT.RESID",
-                             RestrictorPosition == "EXT" ~ "C3.RT.RESID")),
-  spill_tbl %>% #SPILL emms from modelling
-    mutate(Chunk = "SPILL.RT.RESID")) %>%
-  map_dfr(as_tibble) %>% #create tibble from list
-  rename(mean_RT = emmean, #match names of mean and SE in chunks_data
-         se_RT = SE) %>%
-  mutate(Condition = str_c(RestrictorPosition, "-", RestrictorType)) %>%
-  mutate(mean_Type = "EMM") #add mean_Type column for reference
-  
-  
-#extract raw means for quant and noun from chunks_data
-raw_means <- chunks_data %>% 
-  filter(Chunk %in% c("C1.RT.RESID", "C2.RT.RESID")) %>% #filter chunks of interest
-  mutate(mean_Type = "RAW") #add mean_Type column for reference
-
-#bind to produce tibble
-chunks_data_adjusted <- bind_rows(raw_means, all_emms) %>%
-  mutate(ChunkLabel = case_when(
-    RestrictorPosition == "EXT" & Chunk == "C1.RT.RESID" ~ "EVERY",
-    RestrictorPosition == "EXT" & Chunk == "C2.RT.RESID" ~ "NP",
-    RestrictorPosition == "EXT" & Chunk == "C3.RT.RESID" ~ "VP",
-    RestrictorPosition == "EXT" & Chunk == "C4.RT.RESID" ~ "PP",
-    RestrictorPosition == "EXT" & Chunk == "SPILL.RT.RESID" ~ "SPILL",
-    RestrictorPosition == "INT" & Chunk == "C1.RT.RESID" ~ "EVERY",
-    RestrictorPosition == "INT" & Chunk == "C2.RT.RESID" ~ "NP",
-    RestrictorPosition == "INT" & Chunk == "C3.RT.RESID" ~ "PP",
-    RestrictorPosition == "INT" & Chunk == "C4.RT.RESID" ~ "VP",
-    Chunk == "SPILL.RT.RESID" ~ "SPILL",
-    TRUE ~ Chunk  # Default case, if no specific condition
-  ))
-
-```
-
-```{r}
-#plots
-ext_chunks_plot_adj <- chunks_data_adjusted %>%
-  mutate(RestrictorPosition = replace_na(RestrictorPosition, "EXT")) %>%
-  filter(RestrictorPosition == "EXT") %>%
-  ggplot(aes(x = Chunk, y = mean_RT, group = RestrictorType, color = RestrictorType)) +
-  geom_ribbon(aes(ymin = mean_RT - se_RT, ymax = mean_RT + se_RT, group = RestrictorType), 
-              fill = "grey", alpha = 0.2, linetype = "blank") +
-  geom_line(aes(linetype = RestrictorType), linewidth = 1) +  
-  geom_point(aes(shape = RestrictorType), size = 3) +  
-  scale_y_continuous(name = "Mean Reading Time (ms.)") +
-  theme_light(base_size = 20, base_family = "Helvetica") +
-  scale_colour_manual(values = cbPalette) +  
-  facet_grid(vars(RestrictorPosition), switch = "y") +
-  theme(legend.background = element_rect(color = "black", linewidth = 1),
-        plot.title = element_text(hjust = 0.5, size = 25),
-        strip.background = element_rect(fill = "grey90"),
-        strip.text = element_text(colour = "black")) +
-  scale_x_discrete(labels = c("EVERY", "NP", "VP", "PP", "SPILL"))
-
-int_chunks_plot_adj <- chunks_data_adjusted %>%
-  mutate(RestrictorPosition = replace_na(RestrictorPosition, "INT")) %>%
-  filter(RestrictorPosition == "INT") %>%
-  ggplot(aes(x = Chunk, y = mean_RT, group = RestrictorType, color = RestrictorType)) +
-  geom_ribbon(aes(ymin = mean_RT - se_RT, ymax = mean_RT + se_RT, group = RestrictorType), 
-              fill = "grey", alpha = 0.2, linetype = "blank") +
-  geom_line(aes(linetype = RestrictorType), linewidth = 1) +  
-  geom_point(aes(shape = RestrictorType), size = 3) +  
-  scale_y_continuous(name = "Mean Reading Time (ms.)") +
-  theme_light(base_size = 20, base_family = "Helvetica") +
-  scale_colour_manual(values = cbPalette) +  
-  facet_grid(vars(RestrictorPosition), switch = "y") +
-  theme(legend.background = element_rect(color = "black", linewidth = 1),
-        plot.title = element_text(hjust = 0.5, size = 25),
-        strip.background = element_rect(fill = "grey90"),
-        strip.text = element_text(colour = "black")) +
-  scale_x_discrete(labels = c("EVERY", "NP", "PP", "VP", "SPILL"))
-```
-
-```{r}
-#combine plots
-#pdf("charts/exp2_ext_int_chunks_adj_plot.pdf", width = 14, height = 14)
-ext_chunks_plot_adj + 
-  int_chunks_plot_adj + 
-  plot_layout(ncol = 1,
-              guides = "collect",
-              axis_titles = "collect") +
-  plot_annotation(title = "Adjusted Reading Times (ms.)",
-                  theme = theme(plot.title = element_text(hjust = 0.5,
-                                                          size = 30)))
-```
-
 ## COMPQs
 
 ### Accuracy
 
 ```{r}
 #binomial model
+set.seed(9876)
 compacc.blmr1 <- buildmer(CompAcc ~ RestrictorType * RestrictorPosition +
                             TrialN +
                             (1 +  RestrictorType * RestrictorPosition | Participant) +
@@ -890,6 +791,7 @@ summary(compacc.blmr1) #no fx
 ### Response Time
 
 ```{r}
+set.seed(9876)
 comprt.blmr1 <- buildmer(CompRT ~ RestrictorType * RestrictorPosition +
                            TrialN +
                            (1 +  RestrictorType * RestrictorPosition | Participant) +

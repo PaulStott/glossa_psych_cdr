@@ -1,0 +1,11 @@
+.RData
+.Rhistory
+.DS_Store
+exp1_analysis_new.Rmd
+exp1_anon_new.csv
+exp1_resid_new.R
+exp1_tidied_new.csv
+exp2_analysis_new.Rmd
+exp2_anon_new.csv
+exp2_resid_new.R
+exp2_tidied_new.csv
