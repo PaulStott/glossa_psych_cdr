@@ -9,17 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, fig.width = 14)
 ```
 
-```{r}
-#clear workspace
-rm(list=ls()) 
-```
-
-```{r}
+```{r, message=FALSE, include=FALSE, warning=FALSE}
 #colour blind friendly colour palette for dataviz.
 cbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 ```
 
-```{r}
+```{r, message=FALSE, include=FALSE, warning=FALSE}
 #custom functions
 
 #get model output as latex
@@ -64,7 +59,7 @@ sum_tbl <- function(combined_data) {
 }
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, include=FALSE, warning=FALSE}
 #load packages
 library(tidyverse)      #for tidying and wrangling
 library(lme4)           #for LMM building
@@ -76,14 +71,12 @@ library(texreg)         #for LaTeX table output
 library(kableExtra)     #table formatting
 library(xtable)         #table outputs
 library(stargazer)      #lmm output
-library(grid)           #multiple plots
 library(patchwork)      #for plotting
-library(stringr)        #string manipulation
 library(scales)         #aesthetics
 library(ggthemes)       #aesthetics
 ```
 
-```{r}
+```{r, message=FALSE, include=FALSE, warning=FALSE}
 #control scientific notation - makes reading p-values easier
 options("scipen" = 9999, "digits" = 10)
 #increase no. of calcs for emmeans functions
