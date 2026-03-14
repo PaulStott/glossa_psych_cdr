@@ -401,36 +401,6 @@ sum_tbl &lt;- function(combined_data) {
   
   cat(summary_table)
 }</code></pre>
-<pre class="r"><code>#load packages
-library(tidyverse)      #for tidying and wrangling</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.4.3</code></pre>
-<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.4.3</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.4.3</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.4.3</code></pre>
-<pre><code>## Warning: package &#39;purrr&#39; was built under R version 4.4.3</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.4.3</code></pre>
-<pre><code>## Warning: package &#39;lubridate&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(lme4)           #for LMM building</code></pre>
-<pre><code>## Warning: package &#39;lme4&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(lmerTest)       #for better output from LMMs</code></pre>
-<pre><code>## Warning: package &#39;lmerTest&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(emmeans)        #for our planned comparisons</code></pre>
-<pre><code>## Warning: package &#39;emmeans&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(performance)    #check model assumptions</code></pre>
-<pre><code>## Warning: package &#39;performance&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(buildmer)       #assists with iterating through covariates and ixns
-library(texreg)         #for LaTeX table output</code></pre>
-<pre><code>## Warning: package &#39;texreg&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(kableExtra)     #table formatting
-library(xtable)         #table outputs</code></pre>
-<pre><code>## Warning: package &#39;xtable&#39; was built under R version 4.4.3</code></pre>
-<pre class="r"><code>library(stargazer)      #lmm output
-library(grid)           #multiple plots
-library(patchwork)      #for plotting
-#library(stringr)        #string manipulation
-library(scales)         #aesthetics
-library(ggthemes)       #aesthetics</code></pre>
-<pre><code>## Warning: package &#39;ggthemes&#39; was built under R version 4.4.3</code></pre>
 <pre class="r"><code>#control scientific notation - makes reading p-values easier
 options(&quot;scipen&quot; = 9999, &quot;digits&quot; = 10)
 #increase no. of calcs for emmeans functions
@@ -945,7 +915,7 @@ pp_contrasts &lt;- contrast(pp_emms,
 pp_contrasts %&gt;% 
   xtable()</code></pre>
 <pre><code>## % latex table generated in R 4.4.2 by xtable 1.8-8 package
-## % Sat Mar 14 12:05:49 2026
+## % Sat Mar 14 12:10:39 2026
 ## \begin{table}[ht]
 ## \centering
 ## \begin{tabular}{lrrrrl}
@@ -1408,7 +1378,7 @@ vp_emms</code></pre>
          &quot;pairwise&quot;) %&gt;%
   xtable()</code></pre>
 <pre><code>## % latex table generated in R 4.4.2 by xtable 1.8-8 package
-## % Sat Mar 14 12:07:12 2026
+## % Sat Mar 14 12:12:06 2026
 ## \begin{table}[ht]
 ## \centering
 ## \begin{tabular}{lrrrrl}
