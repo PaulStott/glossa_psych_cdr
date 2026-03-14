@@ -64,7 +64,7 @@ sum_tbl <- function(combined_data) {
 }
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, include=FALSE}
 #load packages
 library(tidyverse)      #for tidying and wrangling
 library(lme4)           #for LMM building
@@ -78,7 +78,7 @@ library(xtable)         #table outputs
 library(stargazer)      #lmm output
 library(grid)           #multiple plots
 library(patchwork)      #for plotting
-library(stringr)        #string manipulation
+#library(stringr)        #string manipulation
 library(scales)         #aesthetics
 library(ggthemes)       #aesthetics
 ```
